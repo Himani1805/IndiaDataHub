@@ -13,6 +13,7 @@ const DataTable = ({
 }) => {
     const [empty, setEmpty] = useState(null)
     // console.log(records, filteredLength)
+    
     return (
         <>
             <table className="w-full border-collapse">
