@@ -1,14 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Header from './pages/Header';
 
 const App = () => {
   return (
     <Router>
       <Routes>
         {/* Root path defaults to Login */}
-        <Route path='/header' element={<Header />} />
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
 

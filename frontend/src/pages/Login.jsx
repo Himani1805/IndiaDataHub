@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { Loader2, Lock } from 'lucide-react';
-import Header from './Header';
+import Header from '../components/Header';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });

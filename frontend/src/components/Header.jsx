@@ -4,20 +4,55 @@ import {
     HelpCircle,
     ChevronDown,
     Database,
-    User
+    User,
+    LogOut,
+    LogIn
 } from 'lucide-react';
 
-const Header = ({ searchQuery, setSearchQuery, userImage, onProfileUpload }) => {
+import { useNavigate } from 'react-router-dom';
+
+const Header = ({
+    searchQuery = '',
+    setSearchQuery = () => { },
+    userImage,
+    onProfileUpload,
+    onDatabaseClick,
+    onCalendarClick,
+}) => {
+
+    const navigate = useNavigate();
+    const isAuthenticated = Boolean(localStorage.getItem('token'));
 
     // Trigger for hidden file input
     const triggerUpload = () => {
-        document.getElementById('profile-input').click();
+        const el = document.getElementById('profile-input');
+        if (el) el.click();
     };
 
-    // const handleLogout = () => {
-    //     localStorage.clear();
-    //     navigate('/login');
-    // };
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    };
+
+    const handleSignIn = () => {
+        navigate('/login');
+    };
+
+    const handleDatabase = () => {
+        if (typeof onDatabaseClick === 'function') {
+            onDatabaseClick();
+            return;
+        }
+        navigate(isAuthenticated ? '/dashboard' : '/login');
+    };
+
+    const handleCalendar = () => {
+        if (typeof onCalendarClick === 'function') {
+            onCalendarClick();
+            return;
+        }
+        navigate(isAuthenticated ? '/dashboard' : '/login');
+    };
 
     return (
         <header className="w-full bg-[#000040] h-16 flex items-center justify-between px-6 shadow-md z-50">
@@ -49,33 +84,28 @@ const Header = ({ searchQuery, setSearchQuery, userImage, onProfileUpload }) => 
                     />
                 </div>
             </div>
-            {/* 
-            <div className="flex-1 max-w-xl mx-10">
-                <div className="relative">
-                    <Search className="absolute left-3 top-1.5 h-3.5 w-3.5 text-gray-400" />
-                    <input
-                        type="text"
-                        placeholder="Search for datasets..."
-                        className="w-full bg-white/10 text-white text-xs h-7 pl-9 pr-4 rounded-sm focus:bg-white focus:text-gray-800 transition-all outline-none"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                </div>
-            </div> */}
 
             {/* RIGHT: NAVIGATION & PROFILE */}
             <div className="flex items-center gap-8">
 
                 {/* Functional Links from PDF */}
-                <nav className="hidden xl:flex items-center gap-6">
-                    <button className="flex items-center gap-1 text-gray-300 hover:text-white transition-colors text-[14px] font-medium">
+                <nav className="hidden xl:flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-2 py-1">
+                    <button
+                        type="button"
+                        onClick={handleDatabase}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[13px] font-semibold"
+                    >
                         Database <ChevronDown size={14} className="mt-0.5" />
                     </button>
-                    <button className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-[14px] font-medium">
+                    <button
+                        type="button"
+                        onClick={handleCalendar}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[13px] font-semibold"
+                    >
                         <Calendar size={16} />
                         Calendar
                     </button>
-                    <button className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors text-[14px] font-medium">
+                    <button className="flex items-center gap-2 px-3 py-1.5 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-colors text-[13px] font-semibold">
                         <HelpCircle size={16} />
                         Help
                     </button>
@@ -106,13 +136,25 @@ const Header = ({ searchQuery, setSearchQuery, userImage, onProfileUpload }) => 
                         />
                     </div>
                 </div>
-                {/* <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
-                >
-                    <LogOut className="h-4 w-4" />
-                    Logout
-                </button> */}
+                {isAuthenticated ? (
+                    <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-white/5 border border-white/15 text-white/85 hover:bg-red-500/15 hover:border-red-400/40 hover:text-white transition-colors"
+                    >
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                    </button>
+                ) : (
+                    <button
+                        type="button"
+                        onClick={handleSignIn}
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-full bg-white/5 border border-white/15 text-white/85 hover:bg-white/10 hover:text-white transition-colors"
+                    >
+                        <LogIn className="h-4 w-4" />
+                        Sign in
+                    </button>
+                )}
             </div>
         </header>
     );
