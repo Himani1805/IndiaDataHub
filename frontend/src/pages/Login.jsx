@@ -5,7 +5,7 @@ import { Loader2, Lock } from 'lucide-react';
 import Header from '../components/Header';
 
 const Login = () => {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: 'admin@indiadatahub.com', password: 'password123' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
